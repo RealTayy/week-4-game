@@ -2,10 +2,10 @@ body {
     font-family: 'Aldrich', sans-serif;
 }
 
-#player {
+.char-box {
+    position: relative;
     height: 250px;
-    width: 200px;
-    /* background-color: pink; */
+    width: 200px;    
 }
 
 .sprite {
@@ -21,9 +21,15 @@ body {
 }
 
 .damage {
-    position: absolute;        
-    top: 75px;
+    position: absolute;
+    top: 65px;
     left: 125px;
-    font-size: 25px;
-    background-color: transparent;    
+    font-size: 45px;
+    background-color: transparent;
+    text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
+}
+
+.pixel-art {
+    position: absolute;
+    width: 100%;
 }
