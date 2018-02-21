@@ -1,3 +1,7 @@
+html {
+    background-color: rgb(77, 90, 74);
+}
+
 body {
     font-family: 'Aldrich', sans-serif;
 }
@@ -20,20 +24,47 @@ header {
     width: 300px;
     height: 580px;
     background-color: olivedrab;
-    border: 10px solid black;    
+    border: 10px solid #613E00;    
 }
 
 #info-area {
-    width: inherit;
-    height: 370px;
-    background-color: blueviolet;    
-    border-bottom: 10px solid black;
+    width: 260px;
+    height: 330px;
+    background-color: #444;    
+    border-bottom: 10px solid #613E00;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
 }
+
+#info-text {
+    width: inherit;    
+    font-size: 21px;
+}
+
+button {
+    height: 50px;
+    width: 80%;
+    margin: 10px;
+    border: 5px inset #d39b00;
+    background: #ebac00;    
+    font: inherit;
+    font-size: 19px;
+    color: #fff;
+}
+
+button:active {
+    /* border-style: outset; */
+    background: #866300;  
+    border-color: #bb8900; 
+}
+
+button:focus {outline:0;}
 
 #combat-log {
     width: inherit;
     height: 200px;
-    background-color: #444;
+    background-color: #222;
 }
 
 #right-section {
@@ -42,7 +73,7 @@ header {
     width: 630px;
     height: 580px;
     background: pink;
-    border: 10px solid black;
+    border: 10px solid #613E00;
     border-left: none;
 }
 
@@ -66,11 +97,13 @@ header {
 
 .sprite {
     height: 300px;
-    width: 300px;
-    background-color: blue;
+    width: 0;    
+    /* background-color: blue; */
 }
 
 .hpbar {
+    position: absolute;
+    top: 300px;
     height: 50px;
     width: 300px;
     background-color: green;
@@ -79,13 +112,20 @@ header {
 .damage {
     position: absolute;
     top: 65px;
-    left: 200px;
+    left: 150px;
     font-size: 55px;
     background-color: transparent;
     text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
 }
 
-.pixel-art {
-    
-    width: 300px;
+#dungeon {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 30px;
+
+    font-size: 40px;
+    text-align: center; 
+    color: #222;       
+    text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
 }

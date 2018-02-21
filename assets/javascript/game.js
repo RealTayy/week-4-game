@@ -10,6 +10,7 @@ class PlayerChar {
         this._armourLvl;
         this._curWeapon;
         this._curArmour;
+        this._clearedDungeons = [];
     }
 
     updateStats() {
@@ -21,15 +22,15 @@ class PlayerChar {
     }
 
     attackL() {
-        return this.rollHit(100) ? Math.floor(this._curAttack * .8) : -1;
+        enemy().takeDamage(this.rollHit(100) ? Math.floor(this._curAttack * .8) : -1);
     }
 
     attackM() {
-        return this.rollHit(80) ? this._curAttack : -1;
+        enemy().takeDamage(this.rollHit(80) ? this._curAttack : -1);
     }
 
     attackH() {
-        return this.rollHit(50) ? Math.floor(this._curAttack * 1.5) : -1;
+        enemy().takeDamage(this.rollHit(50) ? Math.floor(this._curAttack * 1.5) : -1);
     }
 
     rollHit(hitChance) {
@@ -37,6 +38,8 @@ class PlayerChar {
     }
 
     takeDamage(damageTaken) {
+        $("#player-damage").finish();
+        $("#player-sprite").finish();
         // Logic for Miss vs Hit
         let finalDamage = 0;
         if (damageTaken === -1) {
@@ -52,7 +55,7 @@ class PlayerChar {
         $('#player-damage').animate({
             opacity: 0,
             top: "-=65",
-        }, 1000, function () {
+        }, 500, function () {
             $(this).text('');
             $(this).removeAttr('style');
         });
@@ -101,7 +104,7 @@ class Knight extends PlayerChar {
     }
 
     getImage() {
-        return 'http://via.placeholder.com/300x300';
+        return './assets/images/knight-1.png';
     }
 }
 
@@ -109,7 +112,7 @@ class Barbarian extends PlayerChar {
     constructor() {
         super();
         this.charID = 2;
-        this._name = 'Beserker';
+        this._name = 'Barbarian';
         this._health = [60, 75, 90];
         this._attack = [6, 8, 10];
         this._defense = [3, 4, 5];
@@ -120,7 +123,7 @@ class Barbarian extends PlayerChar {
     }
 
     getImage() {
-        return 'http://via.placeholder.com/300x300';
+        return './assets/images/dwarf-1.png';
     }
 }
 
@@ -139,7 +142,7 @@ class Rogue extends PlayerChar {
     }
 
     getImage() {
-        return 'http://via.placeholder.com/300x300';
+        return './assets/images/rogue-1.png';
     }
 }
 
@@ -163,12 +166,28 @@ class Enemy {
                 this._curDefense = 0
                 this._curAttack = 2
                 break;
+            case 2:
+                this._enemyID = 1
+                this._name = 'Dark Sorcerer'
+                this._maxHP = 10
+                this._curHP = 10
+                this._curDefense = 0
+                this._curAttack = 2
+                break;
+            case 3:
+                this._enemyID = 1
+                this._name = 'Dark Knight'
+                this._maxHP = 10
+                this._curHP = 10
+                this._curDefense = 0
+                this._curAttack = 2
+                break;
         }
 
     }
 
     attack() {
-        return this.rollHit(80) ? this._curAttack : -1;
+        player().takeDamage(this.rollHit(80) ? this._curAttack : -1);
     }
 
     rollHit(hitChance) {
@@ -176,6 +195,8 @@ class Enemy {
     }
 
     takeDamage(damageTaken) {
+        $("#enemy-damage").finish();
+        $("#enemy-sprite").finish();
         // Logic for Miss vs Hit
         let finalDamage = 0;
         if (damageTaken === -1) {
@@ -191,7 +212,7 @@ class Enemy {
         $('#enemy-damage').animate({
             opacity: 0,
             top: "-=65",
-        }, 1000, function () {
+        }, 500, function () {
             $(this).text('');
             $(this).removeAttr('style');
         });
@@ -201,7 +222,9 @@ class Enemy {
 
     getImage(ID) {
         switch (ID) {
-            case 1: return 'http://via.placeholder.com/300x300'; break;
+            case 1: return './assets/images/bat.png'; break;
+            case 2: return './assets/images/darkSoc.png'; break;
+            case 3: return './assets/images/darkKnight.png'; break;
         }
     }
 
@@ -214,6 +237,119 @@ class Enemy {
         else if (hp < 0) this._curHP = 0;
         else this._curHP = hp;
     }
+}
+
+class Dungeon {
+    constructor(dungeonID) {
+        this._dungeonID = dungeonID;
+        switch (dungeonID) {
+            case 1:
+                this._dungeonName = 'Dark Dungeon';
+                this._monsterArray = [1, 2, 3];
+                break;
+            case 2:
+                this._dungeonName = 'Orc Camp';
+                this._monsterArray = [4, 5, 6];
+                break;
+            case 3:
+                this._dungeonName = 'Elemental Plane';
+                this._monsterArray = [7, 8, 9];
+                break;
+        }
+        this._deafeatedMonArray = [];
+    }
+}
+
+function startGame() {
+    let updateUI = {
+        loadCharSelect: function () {
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('Choose your Character!');
+            $('#selection-1').html('Knight');
+            $('#selection-2').html('Barbarian');
+            $('#selection-3').html('Rogue');
+            $('#selection-4').html('Confirm');
+
+            // Sets event listeners for buttons
+            $("#selection-1").on("click", function () {
+                loadPlayer(1);
+            });
+
+            $("#selection-2").on("click", function () {
+                loadPlayer(2);
+            });
+
+            $("#selection-3").on("click", function () {
+                loadPlayer(3);
+            });
+
+            $("#selection-4").on("click", function () {
+                if ($('#player').data().hasOwnProperty('character')) {
+                    $(".menu-button").unbind('click');
+                    updateUI.loadDungeonSelect();
+                } else {
+                    alert("Please choose a character before hitting confirm");
+                }
+            });
+        },
+
+        loadDungeonSelect: function () {
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('Select an Adventure!');
+            $(".menu-button").css('display', 'initial');
+            $('#selection-1').html('Dark Dungeon </br> Easy');
+            $('#selection-2').html('Orc Camp </br> Medium');
+            $('#selection-3').html('Elemental Plane </br> Hard');
+            $('#selection-4').html('Confirm');
+
+            // Sets event listeners for buttons
+            $("#selection-1").on("click", function () {
+                $('#dungeon').text('Dark Dungeon');
+            });
+
+            $("#selection-2").on("click", function () {
+                $('#dungeon').text('Orc Camp');
+            });
+
+            $("#selection-3").on("click", function () {
+                $('#dungeon').text('Elemental Plane');
+            });
+
+            $("#selection-4").on("click", function () {
+                // Need to add if else to make sure a dungeon is selected first ok?
+                $(".menu-button").unbind('click');
+                updateUI.loadAttackSelect();
+            });
+
+        },
+
+        loadAttackSelect: function () {
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('Choose an Attack');
+            $('#selection-1').html('Light Attack');
+            $('#selection-2').html('Medium Attack');
+            $('#selection-3').html('Heavy Attack');
+            $('#selection-4').css('display', 'none');
+
+            // Sets event listeners for buttons
+            $("#selection-1").on("click", function () {
+                player().attackL();
+            });
+
+            $("#selection-2").on("click", function () {
+                player().attackM();
+            });
+
+            $("#selection-3").on("click", function () {
+                player().attackH();
+            });
+        }
+    }
+
+    updateUI.loadCharSelect();
 }
 
 function genPlayer(charID) {
@@ -230,33 +366,11 @@ function genEnemy(enemyID) {
     return enemy;
 }
 
-function startGame() {
-    // Some event listener thing that waits for you to choose a character. Do some weird thing where you like click a character and it changes it to an active state. and once you "CONFIRM" it goes on... Maybe have it display that characters stats while you have it "active"    
-    // Some function that sets your character to your choice
-    // Some 
-    // Some thing that randomizes enemy character
-    // startCombat();
-
-    function startCombat() {
-
-    }
-
-    function chooseCharacter() {
-
-    }
-
-    function setPlayerCharacter() {
-
-    }
-
-    function setEnemyCharacter() {
-
-    }
-}
-
 function loadPlayer(charID) {
     $("#player").data("character", genPlayer(charID));
     $("#player-sprite img").attr("src", player().getImage());
+    $("#player-sprite").finish();
+    $("#player-sprite").effect("bounce", { times: 3, distance: 125 }, 500);
 }
 
 function loadEnemy(enemyID) {
@@ -273,3 +387,5 @@ function player() {
 function enemy() {
     return $('#enemy').data('character');
 }
+
+startGame();
