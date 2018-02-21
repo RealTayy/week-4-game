@@ -25,21 +25,40 @@
 </head>
 
 <body>
-    <div id=player class=char-box>
-        <div id=player-sprite class=sprite>
-            <img class=pixel-art src="./assets/images/genericGuy.png" />
-        </div>
-        <div id=player-damage class=damage></div>
-        <div id=player-hpbar class=hpbar>
-        </div>
-    </div>
+    <div class=wrapper>
+        <header>
+            <img id='header-text' src='http://via.placeholder.com/960x200' />
+        </header>
+        <div id=game-area>
+            <div id="left-section">
+                <div id="info-area">
 
-    <div id=enemy class=char-box>
-        <div id=enemy-sprite class=sprite>
-            <img class=pixel-art src="./assets/images/genericGuy.png" />
-        </div>
-        <div id=enemy-damage class=damage></div>
-        <div id=enemy-hpbar class=hpbar>
+                </div>
+                <div id="combat-log">
+                    
+                </div>
+
+            </div>
+            <div id="right-section">
+                <div id='player' class='char' -box>
+                    <div id='player-sprite' class='sprite'>
+                        <img class='pixel-art' src='./assets/images/genericGuy.png' />
+                    </div>
+                    <div id='player-damage' class='damage'></div>
+                    <div id='player-hpbar' class='hpbar'>
+                    </div>
+                </div>
+
+                <div id='enemy' class='char-box'>
+                    <div id='enemy-sprite' class='sprite'>
+                        <img class='pixel-art' src="./assets/images/genericGuy.png" />
+                    </div>
+                    <div id='enemy-damage' class='damage'></div>
+                    <div id='enemy-hpbar' class='hpbar'>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

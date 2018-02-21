@@ -101,7 +101,7 @@ class Knight extends PlayerChar {
     }
 
     getImage() {
-        return '<img src="http://via.placeholder.com/200x200" />';
+        return 'http://via.placeholder.com/300x300';
     }
 }
 
@@ -120,7 +120,7 @@ class Barbarian extends PlayerChar {
     }
 
     getImage() {
-        return '<img src="http://via.placeholder.com/200x200" />'
+        return 'http://via.placeholder.com/300x300';
     }
 }
 
@@ -139,7 +139,7 @@ class Rogue extends PlayerChar {
     }
 
     getImage() {
-        return '<img src="http://via.placeholder.com/200x200"/>'
+        return 'http://via.placeholder.com/300x300';
     }
 }
 
@@ -201,7 +201,7 @@ class Enemy {
 
     getImage(ID) {
         switch (ID) {
-            case 1: return '<img src="http://via.placeholder.com/200x200"/>'; break;
+            case 1: return 'http://via.placeholder.com/300x300'; break;
         }
     }
 
@@ -256,13 +256,13 @@ function startGame() {
 
 function loadPlayer(charID) {
     $("#player").data("character", genPlayer(charID));
-    $("#player-sprite").html(player().getImage());
+    $("#player-sprite img").attr("src", player().getImage());
 }
 
 function loadEnemy(enemyID) {
     $("#enemy").data("character", genEnemy());
     enemy().setMonster(enemyID);
-    $("#enemy-sprite").html(enemy().getImage(enemyID));
+    $("#enemy-sprite img").attr("src", enemy().getImage(enemyID));
 
 }
 
