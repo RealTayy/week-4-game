@@ -159,22 +159,70 @@ class Enemy {
     setMonster(enemyID) {
         switch (enemyID) {
             case 1:
-                this._enemyID = 1
-                this._name = 'bat'
-                this._maxHP = 10
-                this._curHP = 10
-                this._curDefense = 0
-                this._curAttack = 2
+                this._enemyID = 1;
+                this._name = 'bat';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
                 break;
             case 2:
+                this._enemyID = 1;
+                this._name = 'Dark Sorcerer';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 3:
+                this._enemyID = 1;
+                this._name = 'Dark Knight';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 4:
+                this._enemyID = 1;
+                this._name = 'Orc Grunt';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 5:
+                this._enemyID = 1;
+                this._name = 'Orc Veteran';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 6:
+                this._enemyID = 1;
+                this._name = 'Orc Big Guy';
+                this._maxHP = 10;;
+                this._curHP = 10
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 7:
                 this._enemyID = 1
-                this._name = 'Dark Sorcerer'
+                this._name = 'Dark Knight'
                 this._maxHP = 10
                 this._curHP = 10
                 this._curDefense = 0
                 this._curAttack = 2
                 break;
-            case 3:
+            case 8:
+                this._enemyID = 1
+                this._name = 'Dark Knight'
+                this._maxHP = 10
+                this._curHP = 10
+                this._curDefense = 0
+                this._curAttack = 2
+                break;
+            case 9:
                 this._enemyID = 1
                 this._name = 'Dark Knight'
                 this._maxHP = 10
@@ -225,6 +273,12 @@ class Enemy {
             case 1: return './assets/images/bat.png'; break;
             case 2: return './assets/images/darkSoc.png'; break;
             case 3: return './assets/images/darkKnight.png'; break;
+            case 4: return './assets/images/orc1.png'; break;
+            case 5: return './assets/images/orc2.png'; break;
+            case 6: return './assets/images/orc3.png'; break;
+            case 7: return './assets/images/ele1.png'; break;
+            case 8: return './assets/images/ele2.png'; break;
+            case 9: return './assets/images/ele3.png'; break;
         }
     }
 
@@ -234,7 +288,7 @@ class Enemy {
 
     set curHP(hp) {
         if (hp > this._maxHP) this._curHP = this._maxHP;
-        else if (hp < 0) this._curHP = 0;
+        else if (hp < 1) this._curHP = 0;
         else this._curHP = hp;
     }
 }
@@ -246,23 +300,27 @@ class Dungeon {
             case 1:
                 this._dungeonName = 'Dark Dungeon';
                 this._monsterArray = [1, 2, 3];
+                $('#right-section').css('background', 'url("./assets/images/bg-1.jpg")')
                 break;
             case 2:
                 this._dungeonName = 'Orc Camp';
                 this._monsterArray = [4, 5, 6];
+                $('#right-section').css('background', 'url("./assets/images/bg-2.jpg")')
                 break;
             case 3:
                 this._dungeonName = 'Elemental Plane';
                 this._monsterArray = [7, 8, 9];
+                $('#right-section').css('background', 'url("./assets/images/bg-3.jpg")')
                 break;
         }
-        this._deafeatedMonArray = [];
+
     }
 }
 
 function startGame() {
     let updateUI = {
         loadCharSelect: function () {
+            $(".menu-button").unbind('click');
             // Sets display for buttons
             $(".menu-button").css('display', 'initial');
             $('#info-text').text('Choose your Character!');
@@ -286,15 +344,15 @@ function startGame() {
 
             $("#selection-4").on("click", function () {
                 if ($('#player').data().hasOwnProperty('character')) {
-                    $(".menu-button").unbind('click');
                     updateUI.loadDungeonSelect();
                 } else {
-                    alert("Please choose a character before hitting confirm");
+                    helpText("Please choose a character before hitting confirm");
                 }
             });
         },
 
         loadDungeonSelect: function () {
+            $(".menu-button").unbind('click');
             // Sets display for buttons
             $(".menu-button").css('display', 'initial');
             $('#info-text').text('Select an Adventure!');
@@ -303,29 +361,39 @@ function startGame() {
             $('#selection-2').html('Orc Camp </br> Medium');
             $('#selection-3').html('Elemental Plane </br> Hard');
             $('#selection-4').html('Confirm');
+            //This doesn't makes it not display the dungeons that have already been cleared
+            for (let i = 1; i < 4; i++) {
+                if (player()._clearedDungeons.includes(i)) $('#selection-' + i).css('display', 'none');
+            };
 
             // Sets event listeners for buttons
             $("#selection-1").on("click", function () {
                 $('#dungeon').text('Dark Dungeon');
+                loadDungeon(1);
             });
 
             $("#selection-2").on("click", function () {
                 $('#dungeon').text('Orc Camp');
+                loadDungeon(2);
             });
 
             $("#selection-3").on("click", function () {
                 $('#dungeon').text('Elemental Plane');
+                loadDungeon(3);
             });
 
             $("#selection-4").on("click", function () {
-                // Need to add if else to make sure a dungeon is selected first ok?
-                $(".menu-button").unbind('click');
-                updateUI.loadAttackSelect();
+                if (typeof dungeon() !== 'undefined' && dungeon()._monsterArray.length === 3) {
+                    updateUI.loadAttackSelect();
+                    loadEnemy(dungeon()._monsterArray[0]);
+                } else {
+                    helpText("Please choose a dungeon before hitting confirm!")
+                }
             });
-
         },
 
         loadAttackSelect: function () {
+            $(".menu-button").unbind('click');
             // Sets display for buttons
             $(".menu-button").css('display', 'initial');
             $('#info-text').text('Choose an Attack');
@@ -337,20 +405,67 @@ function startGame() {
             // Sets event listeners for buttons
             $("#selection-1").on("click", function () {
                 player().attackL();
+                enemy().attack();
+                if (player().isDead()) {
+                } else {
+                    checkEnemyStatus();
+                }
             });
 
             $("#selection-2").on("click", function () {
                 player().attackM();
+                enemy().attack();
+                if (player().isDead()) {
+                } else {
+                    checkEnemyStatus();
+                }
             });
 
             $("#selection-3").on("click", function () {
                 player().attackH();
+                enemy().attack();
+                if (player().isDead()) {
+                } else {
+                    checkEnemyStatus();
+                }
             });
+
+            function checkEnemyStatus() {
+                if (enemy().isDead()) {
+                    // Removed enemy from monster queue
+                    dungeon()._monsterArray.shift();
+                    // If more enemies loads the next enemy
+                    if (dungeon()._monsterArray.length > 0) {
+                        loadEnemy(dungeon()._monsterArray[0]);
+                    } else {
+                        player()._clearedDungeons.push(dungeon()._dungeonID);
+                        // Win message stuff here!
+                        if (player()._clearedDungeons.length === 3) {
+                            alert('Umm you beat the game...?')
+                            // If no more enemies lvl up and goes back to dungeon select screen
+                        } else {
+                            player().level = player()._level + 1;
+                            updateUI.loadDungeonSelect();
+                        }
+                    }
+                }
+            }
         }
     }
 
+    function helpText(text) {
+        $("#help-text").finish();
+        $('#help-text').text(text);
+        $('#help-text').delay(1000).animate({ opacity: 0 }, 500, function () {
+            $(this).text('');
+            $(this).removeAttr('style');
+        });
+    }
+
+    // Game flow starts here    
     updateUI.loadCharSelect();
 }
+
 
 function genPlayer(charID) {
     switch (charID) {
@@ -377,7 +492,12 @@ function loadEnemy(enemyID) {
     $("#enemy").data("character", genEnemy());
     enemy().setMonster(enemyID);
     $("#enemy-sprite img").attr("src", enemy().getImage(enemyID));
+    $("#enemy-sprite").finish();
+    $("#enemy-sprite").effect("bounce", { times: 3, distance: 125 }, 500);
+}
 
+function loadDungeon(dungeonID) {
+    $("#dungeon").data("dungeons", new Dungeon(dungeonID));
 }
 
 function player() {
@@ -386,6 +506,10 @@ function player() {
 
 function enemy() {
     return $('#enemy').data('character');
+}
+
+function dungeon() {
+    return $('#dungeon').data('dungeons');
 }
 
 startGame();

@@ -22,8 +22,7 @@ header {
 #left-section {
     float: left;
     width: 300px;
-    height: 580px;
-    background-color: olivedrab;
+    height: 580px;    
     border: 10px solid #613E00;    
 }
 
@@ -53,8 +52,7 @@ button {
     color: #fff;
 }
 
-button:active {
-    /* border-style: outset; */
+button:active {    
     background: #866300;  
     border-color: #bb8900; 
 }
@@ -72,9 +70,10 @@ button:focus {outline:0;}
     float: right;
     width: 630px;
     height: 580px;
-    background: pink;
+    background: #999;
+    /* background: url("../images/bg-1.jpg"); */
     border: 10px solid #613E00;
-    border-left: none;
+    border-left: none;    
 }
 
 #player {
