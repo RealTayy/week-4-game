@@ -14,13 +14,25 @@ class PlayerChar {
         this._clearedDungeons = [];
     }
 
-    updateStats() {
-        console.log("This happened");
+    updateStats() {        
         this._maxHP = this._health[this._level];
         this._curWeapon = this._weapon[this._weaponLvl];
         this._curArmour = this._armour[this._armourLvl];
         this._curAttack = this._attack[this._level];
         this._curDefense = this._defense[this._level];
+        this.drawStats();
+    }
+
+    drawStats() {
+        $("#c-hp").text('HP: ' + this._curHP + "/" + this._maxHP);
+        $("#c-atk").text('ATK: ' + this._curAttack);
+        $("#c-def").text('DEF: ' + this._curDefense);
+        $("#c-lvl").text('Level: ' + this._level);
+        $("#c-weapon").text('W.LVL: ' + this._weaponLvl);
+        $("#c-armour").text('A.LVL: ' + this._armourLvl);
+        $("#c-gold").text('Gold: ' + this._gold);
+        $("#c-weaponstat").text('W.ATK: ' + this._curWeapon);
+        $("#c-armourstat").text('A.DEF: ' + this._curArmour);    
     }
 
     attackL() {
@@ -63,6 +75,7 @@ class PlayerChar {
         });
 
         this.curHP = this._curHP - finalDamage;
+        this.drawStats();
     }
 
     getDamage() {
@@ -106,7 +119,7 @@ class Knight extends PlayerChar {
         this._name = 'Knight';
         this._health = [50, 65, 80];
         this._attack = [5, 7, 9];
-        this._defense = [3, 5, 7];
+        this._defense = [4, 5, 6];
         this._weapon = [0, 3, 6];
         this._armour = [0, 2, 4];
         super._curHP = this._health[0];
@@ -142,7 +155,7 @@ class Rogue extends PlayerChar {
         super();
         this.charID = 3;
         this._name = 'Rogue';
-        this._health = [40, 55, 70];
+        this._health = [45, 60, 75];
         this._attack = [7, 9, 11];
         this._defense = [2, 3, 4];
         this._weapon = [0, 5, 10];
@@ -249,7 +262,13 @@ class Enemy {
                 this._curAttack = 99;
                 break;
         }
+        this.drawStats();
+    }
 
+    drawStats() {
+        $("#e-hp").text('HP: ' + this._curHP + "/" + this._maxHP);
+        $("#e-atk").text('ATK: ' + this._curAttack);
+        $("#e-def").text('DEF: ' + this._curDefense);
     }
 
     attack() {
@@ -284,6 +303,7 @@ class Enemy {
         });
 
         this.curHP = this._curHP - finalDamage;
+        this.drawStats();
     }
 
     getImage(ID) {
@@ -297,7 +317,7 @@ class Enemy {
             case 7: return './assets/images/ele1.png'; break;
             case 8: return './assets/images/ele2.png'; break;
             case 9: return './assets/images/ele3.png'; break;
-            case 10: return 'http://via.placeholder.com/300x300'; break;
+            case 10: return './assets/images/shopOwner.png'; break;
         }
     }
 
@@ -337,7 +357,7 @@ class Dungeon {
 }
 
 function startGame() {
-    loadEnemy(10);
+    // loadEnemy(10);
     $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
 
     let updateUI = {
@@ -467,6 +487,7 @@ function startGame() {
                             alert('Umm you beat the game...? Like you killed all the enemies and cleared the dungeons but I haven\'t made anything fancy yet like a Victory screen so... yay you\'re cool');
                             // If no more enemies lvl up and goes back to dungeon select screen
                         } else {
+                            // Clear the Dungeon text                            
                             player().level = player()._level + 1;
                             //This makes the LEVEL text pop up
                             helpText("You Leveled up to Level " + player()._level);
@@ -478,7 +499,6 @@ function startGame() {
                                 $(this).text('');
                                 $(this).removeAttr('style');
                             });
-
                             updateUI.loadUpgradeSelect();
                         }
                     }
@@ -499,6 +519,7 @@ function startGame() {
             // Load shop keeper?
             loadEnemy(10);
             $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
+            $('#dungeon').text('The Store');
 
             $("#selection-1").on("click", function () {
                 // Upgrades Weapon
