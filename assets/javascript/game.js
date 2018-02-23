@@ -2,35 +2,37 @@ class PlayerChar {
     constructor() {
         this._name;
         this._level = 0;
+        this._gold = 0;
         this._maxHP;
         this._curHP;
         this._curDefense;
         this._curAttack;
-        this._weaponLvl;
-        this._armourLvl;
+        this._weaponLvl = 0;
+        this._armourLvl = 0;
         this._curWeapon;
         this._curArmour;
         this._clearedDungeons = [];
     }
 
     updateStats() {
-        this._curAttack = this._attack[this._level];
-        this._curDefense = this._defense[this._level];
+        console.log("This happened");
         this._maxHP = this._health[this._level];
         this._curWeapon = this._weapon[this._weaponLvl];
         this._curArmour = this._armour[this._armourLvl];
+        this._curAttack = this._attack[this._level];
+        this._curDefense = this._defense[this._level];
     }
 
     attackL() {
-        enemy().takeDamage(this.rollHit(100) ? Math.floor(this._curAttack * .8) : -1);
+        enemy().takeDamage(this.rollHit(100) ? Math.floor(this.getDamage() * .8) : -1);
     }
 
     attackM() {
-        enemy().takeDamage(this.rollHit(80) ? this._curAttack : -1);
+        enemy().takeDamage(this.rollHit(80) ? this.getDamage() : -1);
     }
 
     attackH() {
-        enemy().takeDamage(this.rollHit(50) ? Math.floor(this._curAttack * 1.5) : -1);
+        enemy().takeDamage(this.rollHit(50) ? Math.floor(this.getDamage() * 1.5) : -1);
     }
 
     rollHit(hitChance) {
@@ -63,6 +65,14 @@ class PlayerChar {
         this.curHP = this._curHP - finalDamage;
     }
 
+    getDamage() {
+        return this._curAttack + this._curWeapon;
+    }
+
+    getArmour() {
+        return this._curDefense + this._curArmour;
+    }
+
     isDead() {
         return this._curHP === 0 ? true : false;
     }
@@ -72,12 +82,12 @@ class PlayerChar {
         this.updateStats();
     }
 
-    set weapon(level) {
+    upgradeWeapon(level) {
         this._weaponLvl = level;
         this.updateStats();
     }
 
-    set armour(level) {
+    upgradeArmour(level) {
         this._armourLvl = level;
         this.updateStats();
     }
@@ -159,22 +169,54 @@ class Enemy {
     setMonster(enemyID) {
         switch (enemyID) {
             case 1:
-                this._enemyID = 1;
-                this._name = 'bat';
-                this._maxHP = 10;
-                this._curHP = 10;
-                this._curDefense = 0;
-                this._curAttack = 2;
+                this._enemyID = 1;;
+                this._name = 'bat';;
+                this._maxHP = 10;;
+                this._curHP = 10;;
+                this._curDefense = 2;;
+                this._curAttack = 2;;
                 break;
             case 2:
-                this._enemyID = 1;
-                this._name = 'Dark Sorcerer';
-                this._maxHP = 10;
-                this._curHP = 10;
-                this._curDefense = 0;
-                this._curAttack = 2;
+                this._enemyID = 1;;
+                this._name = 'Dark Sorcerer';;
+                this._maxHP = 10;;
+                this._curHP = 10;;
+                this._curDefense = 0;;
+                this._curAttack = 2;;
                 break;
             case 3:
+                this._enemyID = 1;;
+                this._name = 'Dark Knight';;
+                this._maxHP = 10;;
+                this._curHP = 10;;
+                this._curDefense = 0;;
+                this._curAttack = 2;;
+                break;
+            case 4:
+                this._enemyID = 1;;
+                this._name = 'Orc Grunt';;
+                this._maxHP = 10;;
+                this._curHP = 10;;
+                this._curDefense = 0;;
+                this._curAttack = 2;;
+                break;
+            case 5:
+                this._enemyID = 1;;
+                this._name = 'Orc Veteran';;
+                this._maxHP = 10;;
+                this._curHP = 10;;
+                this._curDefense = 0;;
+                this._curAttack = 2;;
+                break;
+            case 6:
+                this._enemyID = 1;;
+                this._name = 'Orc Big Guy';;
+                this._maxHP = 10;;;
+                this._curHP = 10;
+                this._curDefense = 0;;
+                this._curAttack = 2;;
+                break;
+            case 7:
                 this._enemyID = 1;
                 this._name = 'Dark Knight';
                 this._maxHP = 10;
@@ -182,53 +224,29 @@ class Enemy {
                 this._curDefense = 0;
                 this._curAttack = 2;
                 break;
-            case 4:
-                this._enemyID = 1;
-                this._name = 'Orc Grunt';
-                this._maxHP = 10;
-                this._curHP = 10;
-                this._curDefense = 0;
-                this._curAttack = 2;
-                break;
-            case 5:
-                this._enemyID = 1;
-                this._name = 'Orc Veteran';
-                this._maxHP = 10;
-                this._curHP = 10;
-                this._curDefense = 0;
-                this._curAttack = 2;
-                break;
-            case 6:
-                this._enemyID = 1;
-                this._name = 'Orc Big Guy';
-                this._maxHP = 10;;
-                this._curHP = 10
-                this._curDefense = 0;
-                this._curAttack = 2;
-                break;
-            case 7:
-                this._enemyID = 1
-                this._name = 'Dark Knight'
-                this._maxHP = 10
-                this._curHP = 10
-                this._curDefense = 0
-                this._curAttack = 2
-                break;
             case 8:
-                this._enemyID = 1
-                this._name = 'Dark Knight'
-                this._maxHP = 10
-                this._curHP = 10
-                this._curDefense = 0
-                this._curAttack = 2
+                this._enemyID = 1;
+                this._name = 'Dark Knight';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
                 break;
             case 9:
-                this._enemyID = 1
-                this._name = 'Dark Knight'
-                this._maxHP = 10
-                this._curHP = 10
-                this._curDefense = 0
-                this._curAttack = 2
+                this._enemyID = 1;
+                this._name = 'Dark Knight';
+                this._maxHP = 10;
+                this._curHP = 10;
+                this._curDefense = 0;
+                this._curAttack = 2;
+                break;
+            case 10:
+                this._enemyID = 10;
+                this._name = 'Shop Keeper';
+                this._maxHP = 999;
+                this._curHP = 999;
+                this._curDefense = 99;
+                this._curAttack = 99;
                 break;
         }
 
@@ -279,6 +297,7 @@ class Enemy {
             case 7: return './assets/images/ele1.png'; break;
             case 8: return './assets/images/ele2.png'; break;
             case 9: return './assets/images/ele3.png'; break;
+            case 10: return 'http://via.placeholder.com/300x300'; break;
         }
     }
 
@@ -318,6 +337,9 @@ class Dungeon {
 }
 
 function startGame() {
+    loadEnemy(10);
+    $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
+
     let updateUI = {
         loadCharSelect: function () {
             $(".menu-button").unbind('click');
@@ -438,18 +460,97 @@ function startGame() {
                     if (dungeon()._monsterArray.length > 0) {
                         loadEnemy(dungeon()._monsterArray[0]);
                     } else {
+                        player()._gold += 200;
                         player()._clearedDungeons.push(dungeon()._dungeonID);
                         // Win message stuff here!
                         if (player()._clearedDungeons.length === 3) {
-                            alert('Umm you beat the game...?')
+                            alert('Umm you beat the game...? Like you killed all the enemies and cleared the dungeons but I haven\'t made anything fancy yet like a Victory screen so... yay you\'re cool');
                             // If no more enemies lvl up and goes back to dungeon select screen
                         } else {
                             player().level = player()._level + 1;
-                            updateUI.loadDungeonSelect();
+                            //This makes the LEVEL text pop up
+                            helpText("You Leveled up to Level " + player()._level);
+                            $('#player-damage').html('LEVEL UP!');
+                            $('#player-damage').animate({
+                                opacity: 0,
+                                top: "-=65",
+                            }, 500, function () {
+                                $(this).text('');
+                                $(this).removeAttr('style');
+                            });
+
+                            updateUI.loadUpgradeSelect();
                         }
                     }
                 }
             }
+        },
+
+        loadUpgradeSelect: function () {
+            $(".menu-button").unbind('click');
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('Choose an Attack');
+            $('#selection-1').html('Upgrade Weapon <br/> 100g');
+            $('#selection-2').html('Upgrade Armour <br/> 100g');
+            $('#selection-3').html('Finished');
+            $('#selection-4').css('display', 'none');
+
+            // Load shop keeper?
+            loadEnemy(10);
+            $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
+
+            $("#selection-1").on("click", function () {
+                // Upgrades Weapon
+                if (player()._gold >= 100) {
+                    if (player()._weaponLvl === 3) {
+                        helpText("Weapon is already max LVL!")
+                    }
+                    else {
+                        player().upgradeWeapon(player()._weaponLvl + 1);
+                        player()._gold -= 100;
+                        helpText("Weapon upgraded to Level " + player()._weaponLvl);
+                        $('#player-damage').html('UPGRADED WEAPON!');
+                        $('#player-damage').animate({
+                            opacity: 0,
+                            top: "-=65",
+                        }, 500, function () {
+                            $(this).text('');
+                            $(this).removeAttr('style');
+                        });
+
+                    }
+                } else {
+                    helpText("You don't have enough money to buy that!")
+                }
+            });
+
+            $("#selection-2").on("click", function () {
+                // Upgrades Armour
+                if (player()._gold >= 100) {
+                    if (player()._armourLvl === 2) {
+                        helpText("Armour is already max LVL!");
+                    } else {
+                        player().upgradeArmour(player()._armourLvl + 1);
+                        player()._gold -= 100;
+                        helpText("Armour upgraded to Level " + player()._armourLvl);
+                        $('#player-damage').html('UPGRADED ARMOUR!');
+                        $('#player-damage').animate({
+                            opacity: 0,
+                            top: "-=65",
+                        }, 500, function () {
+                            $(this).text('');
+                            $(this).removeAttr('style');
+                        });
+                    }
+                } else {
+                    helpText("You don't have enough money to buy that!")
+                }
+            });
+
+            $("#selection-3").on("click", function () {
+                updateUI.loadDungeonSelect();
+            });
         }
     }
 
@@ -465,7 +566,6 @@ function startGame() {
     // Game flow starts here    
     updateUI.loadCharSelect();
 }
-
 
 function genPlayer(charID) {
     switch (charID) {
