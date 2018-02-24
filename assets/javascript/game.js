@@ -124,7 +124,7 @@ class Knight extends PlayerChar {
         this._name = 'Knight';
         this._health = [50, 65, 80];
         this._attack = [5, 7, 9];
-        this._defense = [3, 4, 5];
+        this._defense = [4, 5, 6];
         this._weapon = [0, 3, 6];
         this._armour = [0, 3, 6];
         super._curHP = this._health[0];
