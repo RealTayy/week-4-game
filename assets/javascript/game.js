@@ -32,7 +32,7 @@ class PlayerChar {
         $("#c-armour").text('A.LVL: ' + this._armourLvl);
         $("#c-gold").text('Gold: ' + this._gold);
         $("#c-weaponstat").text('W.ATK: ' + this._curWeapon);
-        $("#c-armourstat").text('A.DEF: ' + this._curArmour);    
+        $("#c-armourstat").text('A.DEF: ' + this._curArmour);
     }
 
     attackL() {
@@ -92,12 +92,12 @@ class PlayerChar {
 
     set level(lvl) {
         // All this weird extra stuff just add on the extra hp gained from leveling up
-        this._level = lvl;                
-        this.updateStats();      
-        this._curHP = this._maxHP;          
-        this.updateStats();      
+        this._level = lvl;
+        this.updateStats();
+        this._curHP = this._maxHP;
+        this.updateStats();
         $("#player-sprite img").attr("src", player().getImage());
-        
+
     }
 
     upgradeWeapon(level) {
@@ -115,6 +115,12 @@ class PlayerChar {
         else if (hp < 0) this._curHP = 0;
         else this._curHP = hp;
     }
+
+    beDead() {
+        $("#player-sprite img").attr("src", "http://via.placeholder.com/300x300");
+        $("#player-sprite").finish();
+        $("#player-sprite").effect("bounce", { times: 3, distance: 125 }, 500);
+    }
 }
 
 class Knight extends PlayerChar {
@@ -131,7 +137,7 @@ class Knight extends PlayerChar {
         super.updateStats();
     }
 
-    getImage() {        
+    getImage() {
         return './assets/images/knight-1.png';
     }
 }
@@ -266,6 +272,14 @@ class Enemy {
                 this._curDefense = 99;
                 this._curAttack = 99;
                 break;
+            case 11:
+                this._enemyID = 11;
+                this._name = 'Treasure Chest';
+                this._maxHP = 1;
+                this._curHP = 1;
+                this._curDefense = 1;
+                this._curAttack = 1;
+                break;
         }
         this.drawStats();
     }
@@ -323,6 +337,7 @@ class Enemy {
             case 8: return './assets/images/ele2.png'; break;
             case 9: return './assets/images/ele3.png'; break;
             case 10: return './assets/images/shopOwner.png'; break;
+            case 11: return 'http://via.placeholder.com/300x300'; break;
         }
     }
 
@@ -362,7 +377,6 @@ class Dungeon {
 }
 
 function startGame() {
-    // loadEnemy(10);
     $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
 
     let updateUI = {
@@ -454,7 +468,7 @@ function startGame() {
                 player().attackL();
                 enemy().attack();
                 if (player().isDead()) {
-                    alert("This is where the you lose screen would pop up and end the game but I haven't gotten that far yet");
+                    updateUI.loadLoseScreen();
                 } else {
                     checkEnemyStatus();
                 }
@@ -464,7 +478,7 @@ function startGame() {
                 player().attackM();
                 enemy().attack();
                 if (player().isDead()) {
-                    alert("This is where the you lose screen would pop up and end the game but I haven't gotten that far yet");
+                    updateUI.loadLoseScreen();
                 } else {
                     checkEnemyStatus();
                 }
@@ -474,7 +488,7 @@ function startGame() {
                 player().attackH();
                 enemy().attack();
                 if (player().isDead()) {
-                    alert("This is where the you lose screen would pop up and end the game but I haven't gotten that far yet");
+                    updateUI.loadLoseScreen();
                 } else {
                     checkEnemyStatus();
                 }
@@ -490,11 +504,11 @@ function startGame() {
                     } else {
                         player()._gold += 200;
                         player()._clearedDungeons.push(dungeon()._dungeonID);
-                        
+
                         if (player()._clearedDungeons.length === 3) {
                             // Win message stuff here!
-                            alert('Umm you beat the game...? Like you killed all the enemies and cleared the dungeons but I haven\'t made anything fancy yet like a Victory screen so... yay you\'re cool');                            
-                        // If no more enemies lvl up and goes back to dungeon select screen
+                            updateUI.loadWinScreen();
+                            // If no more enemies lvl up and goes back to dungeon select screen
                         } else {
                             // Clear the Dungeon text                            
                             player().level = player()._level + 1;
@@ -538,7 +552,7 @@ function startGame() {
                     }
                     else {
                         player()._gold -= 100;
-                        player().upgradeWeapon(player()._weaponLvl + 1);                        
+                        player().upgradeWeapon(player()._weaponLvl + 1);
                         helpText("Weapon upgraded to Level " + player()._weaponLvl);
                         $('#player-damage').html('UPGRADED WEAPON!');
                         $('#player-damage').animate({
@@ -581,6 +595,47 @@ function startGame() {
             $("#selection-3").on("click", function () {
                 updateUI.loadDungeonSelect();
             });
+        },
+
+        loadWinScreen: function () {
+            $(".menu-button").unbind('click');
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('You\'v won! Play again?');
+            $('#selection-1').html('Play Again');
+            $('#selection-2').css('display', 'none');
+            $('#selection-3').css('display', 'none');
+            $('#selection-4').css('display', 'none');
+
+            // Load some kind of trophy or something...?
+
+            $("#selection-1").on("click", function () {
+                updateUI.loadCharSelect();
+                enemy().loadEnemy(11);
+                $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
+                $('#dungeon').text('The Store');
+            })
+        },
+
+        loadLoseScreen: function () {
+            $(".menu-button").unbind('click');
+            // Sets display for buttons
+            $(".menu-button").css('display', 'initial');
+            $('#info-text').text('You\'ve been slain! Try again?');
+            $('#selection-1').html('Play Again');
+            $('#selection-2').css('display', 'none');
+            $('#selection-3').css('display', 'none');
+            $('#selection-4').css('display', 'none');
+
+            // Load tombstone for player image...?
+            player().beDead();
+
+            $("#selection-1").on("click", function () {
+                updateUI.loadCharSelect();
+                loadEnemy(10);
+                $('#right-section').css('background', 'url("./assets/images/bg-4.png")')
+                $('#dungeon').text('The Store');
+            })
         }
     }
 
